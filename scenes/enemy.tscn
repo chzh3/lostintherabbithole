@@ -1,0 +1,53 @@
+[gd_scene load_steps=6 format=3 uid="uid://bq378cdunw0uo"]
+
+[ext_resource type="Texture2D" uid="uid://c74c3o5wsduyi" path="res://icon.svg" id="1_7p1mj"]
+[ext_resource type="Script" uid="uid://84pgu6qdyd0d" path="res://scripts/enemyPath.gd" id="1_md0e3"]
+
+[sub_resource type="Curve2D" id="Curve2D_md0e3"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4ra3w"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_7p1mj")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5uy6h"]
+radius = 58.6686
+
+[node name="enemy" type="Path2D"]
+y_sort_enabled = true
+curve = SubResource("Curve2D_md0e3")
+script = ExtResource("1_md0e3")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="."]
+position = Vector2(19.3666, 18.6215)
+progress = 6.91711
+rotates = false
+loop = false
+
+[node name="Node2D" type="Node2D" parent="PathFollow2D"]
+
+[node name="killzone" type="Area2D" parent="PathFollow2D/Node2D"]
+scale = Vector2(0.25, 0.25)
+collision_layer = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="PathFollow2D/Node2D/killzone"]
+sprite_frames = SubResource("SpriteFrames_4ra3w")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PathFollow2D/Node2D/killzone"]
+shape = SubResource("CircleShape2D_5uy6h")
+
+[node name="range" type="Area2D" parent="PathFollow2D/Node2D"]
+
+[node name="range" type="CollisionPolygon2D" parent="PathFollow2D/Node2D/range"]
+position = Vector2(-1.15199, -4.96719)
+scale = Vector2(1.76966, 1.19481)
+polygon = PackedVector2Array(11.4938, 3.89247, 99.0083, -34.0347, 98.583, 32.614)
+
+[connection signal="body_entered" from="PathFollow2D/Node2D/killzone" to="." method="_on_killzone_body_entered"]
+[connection signal="body_entered" from="PathFollow2D/Node2D/range" to="." method="_on_range_body_entered"]
